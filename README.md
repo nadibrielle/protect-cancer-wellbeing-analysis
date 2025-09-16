@@ -1,2 +1,3 @@
 # protect-cancer-wellbeing-analysis
-distress people go through when discovering they have cancer &amp; their psychological health/behavior changes
+
+Analysis of the PRO-TECT dataset (Electronic Patient Reporting of Symptoms in Cancer Patients) & psychological distress/quality of life
