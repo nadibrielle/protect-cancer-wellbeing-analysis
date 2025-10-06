@@ -1,0 +1,105 @@
+---
+title: "analysis"
+format: html
+---
+
+```{r}
+# installing packages
+library(readxl)
+library(tidyverse)
+library(descr)
+library(knitr)
+library(dplyr)
+```
+
+```{r}
+# define the file path (going up one level from /scripts to the main directory)
+file_path <- file.path("..", "data", "data.xlsx")
+
+# load the CSV file into a dataframe (automatically a tibble)
+df <- read_excel(file_path)
+
+# view the first few rows
+head(df)
+```
+
+```{r}
+# check column names
+colnames(df)
+```
+
+```{r}
+# same as column names
+names(df)
+```
+
+```{r}
+# view summary statistics
+summary(df)
+```
+
+```{r}
+# check data structure
+glimpse(df)
+```
+
+```{r}
+# frequency table for Q24 (depression) - highest severity response
+# Frequency table shows a large portion of participants reported at least some level of depressive symptoms. This supports prior research showing that psychological distress is highly common among cancer patients and contributes to reduced well-being.
+df %>%
+  filter(`Variable Name` == "Q24" & Label == "Very much") %>%
+  select(Value, Label, `Unweighted Frequency`, `%`)
+
+# view frequencies for PROCTCAE_INSOMNIA_S (insomnia)
+# sleep disturbance appeared commonly across participants. This suggests that poor sleep often occurs with fatigue and emotional distress.
+df %>%
+  filter(`Variable Name` == "PROCTCAE_INSOMNIA_S" & Label == "Very severe") %>%
+  select(Value, Label, `Unweighted Frequency`, `%`)
+
+# view frequencies for FINANCIAL_TOX (financial struggle)
+# A good percentage of participans reported financial hardship related to their illness. This shows thateconomic strain is not only a social burden but also a significant psychological stressor for cancer survivors.
+df %>%
+  filter(`Variable Name` == "FINANCIAL_TOX" & Label == "Very much") %>%
+  select(Value, Label, `Unweighted Frequency`, `%`)
+```
+
+```{r}
+# Helper to show the highest-severity row for a given variable
+show_top <- function(var) {
+  df %>%
+    filter(`Variable Name` == var) %>%
+    # pick the variable
+    slice_max(order_by = Value, n = 1, with_ties = FALSE) %>%
+    # highest coded category
+    select(Value, Label, `Unweighted Frequency`, `%`)
+}
+
+# Q24 (Depression) – highest severity row
+show_top("Q24")
+
+# Insomnia severity – highest severity row
+show_top("PROCTCAE_INSOMNIA_S")
+
+# Financial hardship – highest severity row
+show_top("FINANCIAL_TOX")
+```
+
+```{r}
+# frequency table for Q24 (depression) - highest severity response
+# Frequency table shows a large portion of participants reported at least some level of depressive symptoms. This supports prior research showing that psychological distress is highly common among cancer patients and contributes to reduced well-being.
+df %>%
+  filter(`Variable Name` == "Q24") %>%
+  select(Value, Label, `Unweighted Frequency`, `%`)
+
+# view frequencies for PROCTCAE_INSOMNIA_S (insomnia)
+# sleep disturbance appeared commonly across participants. This suggests that poor sleep often occurs with fatigue and emotional distress.
+df %>%
+  filter(`Variable Name` == "PROCTCAE_INSOMNIA_S") %>%
+  select(Value, Label, `Unweighted Frequency`, `%`)
+
+# view frequencies for FINANCIAL_TOX (financial struggle)
+# A good percentage of participans reported financial hardship related to their illness. This shows thateconomic strain is not only a social burden but also a significant psychological stressor for cancer survivors.
+df %>%
+  filter(`Variable Name` == "FINANCIAL_TOX") %>%
+  select(Value, Label, `Unweighted Frequency`, `%`)
+```
